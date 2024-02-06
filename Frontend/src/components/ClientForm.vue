@@ -4,6 +4,7 @@
     <input v-model="cups" id="cupsInput" @keyup.enter="fetchData" />
     <button @click="fetchData">{{ $t('SEARCH_BUTTON') }}</button>
 
+    <p v-if="result === null">{{ $t('noElements') }}</p>
     <div v-if="result" class="content">
       <ul>
         <li v-if="result.offers.isRooftopRevolutionAllowed" class="item">
@@ -55,14 +56,13 @@
     data() {
       return {
         cups: '',
-        result: null,
+        result: undefined,
       };
     },
     methods: {
       async fetchData() {
         try {
           const response = await axios.post('http://localhost:3000/clients/info', { cups: this.cups });
-          console.log(response.data);
           this.result = response.data;
         } catch (error) {
           console.error('Error fetching data:', error);

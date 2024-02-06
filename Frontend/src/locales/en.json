@@ -16,5 +16,6 @@
     "isRooftopRevolutionAllowed": "Allowed to enroll to the rooftop revolution",
     "discount": "Discount",
     "YES": "Yes",
-    "NO": "No"
+    "NO": "No",
+    "noElements": "No clients found"
 }

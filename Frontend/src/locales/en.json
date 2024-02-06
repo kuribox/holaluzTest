@@ -1,0 +1,20 @@
+{
+    "TITLE": "Clients query",
+    "SEARCH_INPUT": "Enter Cups",
+    "SEARCH_BUTTON": "Search",
+    "full_name": "Full name",
+    "address": "Address",
+    "cups": "Cups",
+    "role": "Role",
+    "building_type": "Building type",
+    "email": "Email",
+    "password": "Password",
+    "tariff": "Tariff",
+    "invoiced_amount": "Invoiced Amount",
+    "power": "Power",
+    "neighbors": "Neighbors",
+    "isRooftopRevolutionAllowed": "Allowed to enroll to the rooftop revolution",
+    "discount": "Discount",
+    "YES": "Yes",
+    "NO": "No"
+}

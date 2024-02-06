@@ -30,22 +30,28 @@ async function getSupplyPoints(cups) {
   }
 }
 
-app.get('/', (req, res) => {
-  res.send('OK');
-});
-
-const haveDiscount = (supplyPointInfo) => {
+const haveDiscount = async (supplyPointInfo) => {
   if (supplyPointInfo.neighbors?.length > 0) {
-    let haveDiscount = true;
-    supplyPointInfo.neighbors.forEach(async (neighbor) => {
+
+    const neighborPromises = supplyPointInfo.neighbors.map(async (neighbor) => {
       const neighborSupplyPointInfo = await getSupplyPoints(neighbor);
-      if (neighborSupplyPointInfo.power.p1 >= supplyPointInfo.power.p1 || neighborSupplyPointInfo.power.p2 >= supplyPointInfo.power.p2) {
-        haveDiscount = false;
+
+      if (!neighborSupplyPointInfo) {
+        return false;
       }
+
+      if (neighborSupplyPointInfo.power?.p1 >= supplyPointInfo.power?.p1 || neighborSupplyPointInfo.power?.p2 >= supplyPointInfo.power?.p2) {
+        return false;
+      }
+
+      return true;
     });
 
-    return haveDiscount;
+    const results = await Promise.all(neighborPromises);
+
+    return results.every(result => result);
   }
+
   return false;
 }
 
@@ -62,7 +68,7 @@ app.post('/clients/info', async (req, res) => {
 
     const offers = {
       isRooftopRevolutionAllowed: ROOFTOP_REVOLUTION_BUILDING_TYPES.includes(clientInfo.building_type) && supplyPointInfo.neighbors.length >= 1,
-      discount: haveDiscount(supplyPointInfo) ? 5 : 0,
+      discount: await haveDiscount(supplyPointInfo) ? 5 : 0,
     }
 
     const result = {
@@ -81,3 +87,5 @@ app.post('/clients/info', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
+
+module.exports = app;
